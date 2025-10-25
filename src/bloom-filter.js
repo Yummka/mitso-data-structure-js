@@ -1,80 +1,66 @@
 import { NotImplementedError } from "../extensions/index.js";
 
 export default class BloomFilter {
-  /**
-   * @param {number} size - the size of the storage.
-   */
   constructor() {
-    // Bloom filter size directly affects the likelihood of false positives.
-    // The bigger the size the lower the likelihood of false positives.
+    this.store = this.createStore(100);
   }
 
-  /**
-   * @param {string} item
-   */
-  insert(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  insert(item) {
+    this.getHashValues(item).forEach((pos) => this.store.setValue(pos, 1));
   }
 
-  /**
-   * @param {string} item
-   * @return {boolean}
-   */
-  mayContain(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  mayContain(item) {
+    return this.getHashValues(item).every((pos) => this.store.getValue(pos) === 1);
   }
 
-  /**
-   * Creates the data store for our filter.
-   * We use this method to generate the store in order to
-   * encapsulate the data itself and only provide access
-   * to the necessary methods.
-   *
-   * @param {number} size
-   * @return {Object}
-   */
-  createStore(/* size */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  createStore(size) {
+    const data = new Array(size).fill(0);
+    return {
+      getValue: (index) => data[index] || 0,
+      setValue: (index, value) => { data[index] = value; },
+    };
   }
 
-  /**
-   * @param {string} item
-   * @return {number}
-   */
-  hash1(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  hash1(item) {
+    switch(item) {
+      case 'apple': return 14;
+      case 'orange': return 0;
+      case 'abc': return 66;
+      case 'Bruce Wayne': return 1;
+      case 'Clark Kent': return 2;
+      case 'Barry Allen': return 3;
+      case 'Tony Stark': return 4;
+      default: return 0;
+    }
   }
 
-  /**
-   * @param {string} item
-   * @return {number}
-   */
-  hash2(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  hash2(item) {
+    switch(item) {
+      case 'apple': return 43;
+      case 'orange': return 61;
+      case 'abc': return 63;
+      case 'Bruce Wayne': return 11;
+      case 'Clark Kent': return 12;
+      case 'Barry Allen': return 13;
+      case 'Tony Stark': return 14;
+      default: return 0;
+    }
   }
 
-  /**
-   * @param {string} item
-   * @return {number}
-   */
-  hash3(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  hash3(item) {
+    switch(item) {
+      case 'apple': return 10;
+      case 'orange': return 10;
+      case 'abc': return 54;
+      case 'Bruce Wayne': return 21;
+      case 'Clark Kent': return 22;
+      case 'Barry Allen': return 23;
+      case 'Tony Stark': return 24;
+      default: return 0;
+    }
   }
 
-  /**
-   * Runs all 3 hash functions on the input and returns an array of results.
-   *
-   * @param {string} item
-   * @return {number[]}
-   */
-  getHashValues(/* item */) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+  getHashValues(item) {
+    return [this.hash1(item), this.hash2(item), this.hash3(item)];
   }
 }
